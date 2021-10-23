@@ -1,6 +1,6 @@
 #include <jni.h>
 #include <AppKit/NSPasteboard.h>
-#include "ClipboardMacOS.hh"
+#include "ClipboardMac.hh"
 
 extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_jwm_Clipboard__1nSet
         (JNIEnv *env, jclass jclass, jobjectArray entries) {

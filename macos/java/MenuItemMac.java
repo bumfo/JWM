@@ -5,6 +5,7 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 public class MenuItemMac extends MenuItem {
+    @ApiStatus.Internal public String _title;
     @ApiStatus.Internal public MenuMac _parentMenu;
     @ApiStatus.Internal public MenuMac _submenu;
 
@@ -14,9 +15,15 @@ public class MenuItemMac extends MenuItem {
     }
 
     @ApiStatus.Experimental @NotNull @Contract("-> this")
+    public MenuItemMac setTitle(String title) {
+        _title = title;
+        return _updateTitle();
+    }
+
+    @ApiStatus.Experimental @NotNull @Contract("-> this")
     public MenuItemMac setSubmenu(MenuMac submenu) {
         _submenu = submenu;
-        return _updateSubmenu();
+        return _updateTitle()._updateSubmenu();
     }
 
     @ApiStatus.Internal @NotNull @Contract("-> this")
@@ -32,6 +39,19 @@ public class MenuItemMac extends MenuItem {
         }
         return this;
     }
+
+    @ApiStatus.Internal @NotNull @Contract("-> this")
+    public MenuItemMac _updateTitle() {
+        if (_title != null) {
+            _nSetTitle(_title);
+            if (_submenu != null) {
+                _submenu._nSetTitle(_title);
+            }
+        }
+        return this;
+    }
+
+    @ApiStatus.Internal public native void _nSetTitle(String title);
 
     @ApiStatus.Internal public static native long _nMake();
 }

@@ -29,6 +29,8 @@ public class MenuMac extends Menu {
         _nSetApplicationMenu(menu);
     }
 
+    @ApiStatus.Internal public native void _nSetTitle(String title);
+
     @ApiStatus.Internal public native void _nAddItem(MenuItemMac itemObj);
 
     @ApiStatus.Internal public native void _nSetSubmenu(MenuMac subMenu, MenuItemMac itemObj);

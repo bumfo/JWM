@@ -14,6 +14,8 @@ namespace jwm {
 
         bool init();
 
+        void setTitle(std::string title);
+
         NSMenuItem* fNSMenuItem = nullptr;
     };
 }

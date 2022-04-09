@@ -13,6 +13,8 @@ namespace jwm {
 
         bool init();
 
+        void setTitle(std::string title);
+
         void addItem(JNIEnv* env, MenuItemMac* item);
 
         void setSubmenu(JNIEnv* env, MenuMac* submenu, MenuItemMac* forItem);

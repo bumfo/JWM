@@ -34,18 +34,17 @@ public class Example implements Consumer<Event> {
         window.setWindowPosition((int) (300 * scale), (int) (200 * scale));
         window.setVisible(true);
 
-        Menu menu = App.makeMenu();
+        Menu menu = Menu.make();
         if (menu instanceof MenuMac menubar) {
             MenuMac.setApplicationMenu(menubar);
             menubar
-                .addItem(new MenuItemMac()
-                    .setSubmenu(new MenuMac()
-                        .addItem(new MenuItemMac())))
-                .addItem(new MenuItemMac()
-                    .setSubmenu(new MenuMac()
-                        .addItem(new MenuItemMac())))
-                .addItem(new MenuItemMac()
-                    .setSubmenu(new MenuMac()));
+                .addItem(new MenuItemMac().setTitle("A").setSubmenu(new MenuMac()
+                    .addItem(new MenuItemMac().setTitle("A1"))))
+                .addItem(new MenuItemMac().setTitle("B").setSubmenu(new MenuMac()
+                    .addItem(new MenuItemMac().setTitle("B1"))))
+                .addItem(new MenuItemMac().setTitle("C").setSubmenu(new MenuMac()
+                    .addItem(new MenuItemMac().setTitle("C1").setSubmenu(new MenuMac()
+                        .addItem(new MenuItemMac().setTitle("C1.1"))))));
         }
     }
 

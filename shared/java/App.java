@@ -12,8 +12,7 @@ import io.github.humbleui.jwm.impl.*;
 public class App {
     @ApiStatus.Internal
     public static List<Window> _windows = Collections.synchronizedList(new ArrayList<Window>());
-    // @ApiStatus.Internal
-    // public static List<Menu> _menus = Collections.synchronizedList(new ArrayList<Menu>());
+
     @ApiStatus.Internal
     public static long _uiThreadId;
 
@@ -55,22 +54,6 @@ public class App {
             throw new RuntimeException("Unsupported platform: " + Platform.CURRENT);
         _windows.add(window);
         return window;
-    }
-
-    @NotNull @SneakyThrows
-    public static Menu makeMenu() {
-        assert _onUIThread();
-        Menu menu;
-        if (Platform.CURRENT == Platform.WINDOWS)
-            menu = new MenuWin32();
-        else if (Platform.CURRENT == Platform.MACOS)
-            menu = new MenuMac();
-        else if (Platform.CURRENT == Platform.X11)
-            menu = new MenuX11();
-        else
-            throw new RuntimeException("Unsupported platform: " + Platform.CURRENT);
-        // _menus.add(menu);
-        return menu;
     }
 
     /**

@@ -3,6 +3,7 @@
 #import <Cocoa/Cocoa.h>
 #include "MenuMac.hh"
 #include "MenuItemMac.hh"
+#include <StringUTF16.hh>
 
 jwm::MenuMac::~MenuMac() {
     NSLog(@"MenuMac - release");
@@ -17,6 +18,11 @@ bool jwm::MenuMac::init() {
     return true;
 }
 
+void jwm::MenuMac::setTitle(std::string titleStr) {
+    NSString* title = [NSString stringWithCString:titleStr.c_str() encoding:[NSString defaultCStringEncoding]];
+    [fNSMenu setTitle:title];
+}
+
 void jwm::MenuMac::addItem(JNIEnv* env, MenuItemMac* item) {
     NSLog(@"MenuMac - addItem");
 
@@ -28,6 +34,18 @@ void jwm::MenuMac::setSubmenu(JNIEnv* env, MenuMac* submenu, MenuItemMac* forIte
     NSLog(@"MenuMac - setSubmenu");
 
     [fNSMenu setSubmenu:submenu->fNSMenu forItem:forItem->fNSMenuItem];
+}
+
+/*
+ * Class:     io_github_humbleui_jwm_MenuMac
+ * Method:    _nSetTitle
+ * Signature: (Ljava/lang/String;)V
+ */
+extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_jwm_MenuMac__1nSetTitle
+        (JNIEnv *env, jobject obj, jstring str) {
+    jwm::MenuMac* instance = reinterpret_cast<jwm::MenuMac*>(jwm::classes::Native::fromJava(env, obj));
+    jwm::StringUTF16 title = jwm::StringUTF16::makeFromJString(env, str);
+    instance->setTitle(title.toAscii());
 }
 
 /*

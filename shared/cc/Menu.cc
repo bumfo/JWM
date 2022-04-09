@@ -1,4 +1,8 @@
 #include <jni.h>
+#include "Menu.hh"
+
+jwm::Menu::~Menu() {
+}
 
 /*
  * Class:     io_github_humbleui_jwm_Menu

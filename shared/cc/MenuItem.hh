@@ -7,12 +7,12 @@
 namespace jwm {
     class MenuItem: public RefCounted {
     public:
-        MenuItem(JNIEnv* env): fEnv(env) {
-        }
+        // MenuItem(JNIEnv* env): fEnv(env) {
+        // }
 
         virtual ~MenuItem();
 
-        JNIEnv* fEnv = nullptr;
-        jobject fMenuItem = nullptr;
+        // JNIEnv* fEnv = nullptr;
+        // jobject fMenuItem = nullptr;
     };
 }

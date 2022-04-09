@@ -12,8 +12,8 @@ import io.github.humbleui.jwm.impl.*;
 public class App {
     @ApiStatus.Internal
     public static List<Window> _windows = Collections.synchronizedList(new ArrayList<Window>());
-    @ApiStatus.Internal
-    public static List<Menu> _menus = Collections.synchronizedList(new ArrayList<Menu>());
+    // @ApiStatus.Internal
+    // public static List<Menu> _menus = Collections.synchronizedList(new ArrayList<Menu>());
     @ApiStatus.Internal
     public static long _uiThreadId;
 
@@ -69,7 +69,7 @@ public class App {
             menu = new MenuX11();
         else
             throw new RuntimeException("Unsupported platform: " + Platform.CURRENT);
-        _menus.add(menu);
+        // _menus.add(menu);
         return menu;
     }
 

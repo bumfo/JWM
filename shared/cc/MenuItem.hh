@@ -5,14 +5,14 @@
 #include "impl/RefCounted.hh"
 
 namespace jwm {
-    class Menu: public RefCounted {
+    class MenuItem: public RefCounted {
     public:
-        Menu(JNIEnv* env): fEnv(env) {
+        MenuItem(JNIEnv* env): fEnv(env) {
         }
 
-        virtual ~Menu();
+        virtual ~MenuItem();
 
         JNIEnv* fEnv = nullptr;
-        jobject fMenu = nullptr;
+        jobject fMenuItem = nullptr;
     };
 }

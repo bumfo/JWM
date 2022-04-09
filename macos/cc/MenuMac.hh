@@ -1,5 +1,7 @@
 #pragma once
+
 #include "Menu.hh"
+#include "MenuItemMac.hh"
 
 namespace jwm {
     class MenuMac: public Menu {
@@ -8,6 +10,8 @@ namespace jwm {
         ~MenuMac() override;
 
         bool init();
+
+        void addItem(JNIEnv* env, MenuItemMac* item);
 
         NSMenu* fNSMenu = nullptr;
     };

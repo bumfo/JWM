@@ -28,6 +28,8 @@ public class Example implements Consumer<Event> {
         Menu menu = App.makeMenu();
         if (menu instanceof MenuMac menuMac) {
             MenuMac.setApplicationMenu(menuMac);
+            menuMac.addItem(new MenuItemMac());
+            menuMac.addItem(new MenuItemMac());
         }
     }
 
@@ -62,6 +64,7 @@ public class Example implements Consumer<Event> {
     public static void main(String[] args) {
         App.start(() -> {
             new Example();
+            System.gc();
         });
     }
 }

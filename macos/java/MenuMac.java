@@ -10,11 +10,17 @@ public class MenuMac extends Menu {
     }
 
     @ApiStatus.Experimental
+    public void addItem(MenuItemMac menuItemMac) {
+        _nAddItem(menuItemMac);
+    }
+
+    @ApiStatus.Experimental
     public static void setApplicationMenu(MenuMac menu) {
         _nSetApplicationMenu(Native.getPtr(menu));
     }
 
-    @ApiStatus.Internal public native void _nInsertItem(long ptr, int atIndex);
+    @ApiStatus.Internal public native void _nAddItem(MenuItemMac menuItem);
+
 
     @ApiStatus.Internal public static native long _nMake();
 

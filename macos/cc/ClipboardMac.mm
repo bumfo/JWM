@@ -98,6 +98,8 @@ extern "C" JNIEXPORT jobjectArray JNICALL Java_io_github_humbleui_jwm_Clipboard_
     NSLog(@"Clipboard.getFormats");
 
     std::vector<std::string> formats;
+
+    // TODO add other formats
     formats.push_back("text/plain");
 
     std::vector<jobject> formatObjs;

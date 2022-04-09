@@ -7,7 +7,8 @@
 namespace jwm {
     class MenuItemMac: MenuItem {
     public:
-        MenuItemMac(JNIEnv* env): MenuItem(env) {}
+        // MenuItemMac(JNIEnv* env): MenuItem(env) {}
+        MenuItemMac(JNIEnv* env) {}
 
         ~MenuItemMac() override;
 

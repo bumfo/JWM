@@ -9,6 +9,6 @@ namespace jwm {
 
         bool init();
 
-        // NSMenu* fNSMenu = nullptr;
+        NSMenu* fNSMenu = nullptr;
     };
 }

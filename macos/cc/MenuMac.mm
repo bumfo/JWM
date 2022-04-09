@@ -8,6 +8,35 @@ jwm::MenuMac::~MenuMac() {}
 bool jwm::MenuMac::init() {
     NSLog(@"MenuMac - init");
 
+    fNSMenu = [[NSMenu alloc] initWithTitle:@""];
+
+    // {
+    //     NSMenu *fNSMenu = [[NSMenu alloc] initWithTitle:@""];
+        [NSApp setMainMenu:fNSMenu];
+
+        NSMenuItem *item;
+        NSMenu *menu;
+
+        item = [[NSMenuItem alloc] initWithTitle:@"" action:nil keyEquivalent:@""];
+        [fNSMenu addItem:item];
+
+        menu = [[NSMenu alloc] initWithTitle:@"Apple"];
+        [fNSMenu setSubmenu:menu forItem:item];
+        [item release];
+
+        item = [[NSMenuItem alloc] initWithTitle:@"Quit Custom" action:@selector(terminate:) keyEquivalent:@"q"];
+        [menu addItem:item];
+        [item release];
+
+        [menu release];
+    //     [fNSMenu release];
+    // }
+    //
+    // NSMenuItem *menuBarItem = [[NSMenuItem alloc] initWithTitle:@"Help" action:NULL keyEquivalent:@""];
+    // NSMenu *newMenu = [[NSMenu alloc] initWithTitle:@"Custom"];
+    // [menuBarItem setSubmenu:newMenu];
+    // [[NSApp mainMenu] insertItem:menuBarItem atIndex:1];
+
     return true;
 }
 

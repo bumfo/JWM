@@ -40,6 +40,8 @@ extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_jwm_Clipboard__1nSet
               BOOL ret = [[NSPasteboard generalPasteboard] setData:nsData forType:NSPasteboardTypeString];
 
               NSLog(@"setString ret = %d", ret);
+
+              break;
             } else {
               NSLog(@"setData not implemented for %s", formatStdStr.c_str());
             }

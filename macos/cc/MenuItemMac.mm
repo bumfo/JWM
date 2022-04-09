@@ -11,15 +11,15 @@ jwm::MenuItemMac::~MenuItemMac() {
 bool jwm::MenuItemMac::init() {
     NSLog(@"MenuItemMac - init");
 
-    fNSMenuItem = [[NSMenuItem alloc] initWithTitle:@"" action:nil keyEquivalent:@""];
+    fNSMenuItem = [[NSMenuItem alloc] initWithTitle:@"MenuItem" action:nil keyEquivalent:@""];
 
-    NSMenu* menu = [[NSMenu alloc] initWithTitle:@"Apple"];
-    [[NSApp mainMenu] setSubmenu:menu forItem:fNSMenuItem];
-
-    NSMenuItem* item = [[NSMenuItem alloc] initWithTitle:@"Quit Custom" action:@selector(terminate:) keyEquivalent:@"q"];
-    [menu addItem:item];
-    [item release];
-    [menu release];
+    // NSMenu* menu = [[NSMenu alloc] initWithTitle:@"Apple"];
+    // [[NSApp mainMenu] setSubmenu:menu forItem:fNSMenuItem];
+    //
+    // NSMenuItem* item = [[NSMenuItem alloc] initWithTitle:@"Quit Custom" action:@selector(terminate:) keyEquivalent:@"q"];
+    // [menu addItem:item];
+    // [item release];
+    // [menu release];
 
     return true;
 }

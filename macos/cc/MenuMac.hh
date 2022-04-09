@@ -8,11 +8,14 @@ namespace jwm {
     public:
         // MenuMac(JNIEnv* env): Menu(env) {}
         MenuMac(JNIEnv* env) {}
+
         ~MenuMac() override;
 
         bool init();
 
         void addItem(JNIEnv* env, MenuItemMac* item);
+
+        void setSubmenu(JNIEnv* env, MenuMac* submenu, MenuItemMac* forItem);
 
         NSMenu* fNSMenu = nullptr;
     };

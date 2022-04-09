@@ -1,12 +1,21 @@
 package io.github.humbleui.jwm.examples;
 
-import io.github.humbleui.jwm.*;
-import io.github.humbleui.jwm.skija.*;
-import io.github.humbleui.skija.*;
-import io.github.humbleui.types.*;
+import io.github.humbleui.jwm.App;
+import io.github.humbleui.jwm.Event;
+import io.github.humbleui.jwm.EventWindowClose;
+import io.github.humbleui.jwm.EventWindowCloseRequest;
+import io.github.humbleui.jwm.Menu;
+import io.github.humbleui.jwm.MenuItemMac;
+import io.github.humbleui.jwm.MenuMac;
+import io.github.humbleui.jwm.Window;
+import io.github.humbleui.jwm.skija.EventFrameSkija;
+import io.github.humbleui.jwm.skija.LayerGLSkija;
+import io.github.humbleui.skija.Canvas;
+import io.github.humbleui.skija.Paint;
+import io.github.humbleui.skija.Surface;
+import io.github.humbleui.types.Rect;
 
-import java.util.*;
-import java.util.function.*;
+import java.util.function.Consumer;
 
 public class Example implements Consumer<Event> {
     public Window window;
@@ -26,10 +35,17 @@ public class Example implements Consumer<Event> {
         window.setVisible(true);
 
         Menu menu = App.makeMenu();
-        if (menu instanceof MenuMac menuMac) {
-            MenuMac.setApplicationMenu(menuMac);
-            menuMac.addItem(new MenuItemMac());
-            menuMac.addItem(new MenuItemMac());
+        if (menu instanceof MenuMac menubar) {
+            MenuMac.setApplicationMenu(menubar);
+            menubar
+                .addItem(new MenuItemMac()
+                    .setSubmenu(new MenuMac()
+                        .addItem(new MenuItemMac())))
+                .addItem(new MenuItemMac()
+                    .setSubmenu(new MenuMac()
+                        .addItem(new MenuItemMac())))
+                .addItem(new MenuItemMac()
+                    .setSubmenu(new MenuMac()));
         }
     }
 
@@ -50,8 +66,9 @@ public class Example implements Consumer<Event> {
     @Override
     public void accept(Event e) {
         if (e instanceof EventWindowClose) {
-            if (App._windows.size() == 0)
+            if (App._windows.size() == 0) {
                 App.terminate();
+            }
             return;
         } else if (e instanceof EventFrameSkija ee) {
             Surface s = ee.getSurface();

@@ -26,7 +26,13 @@ bool jwm::MenuItemMac::init() {
 }
 
 void jwm::MenuItemMac::setTitle(std::string titleStr) {
-    NSString* title = [NSString stringWithCString:titleStr.c_str() encoding:[NSString defaultCStringEncoding]];
+    NSString* title = [NSString stringWithUTF8String:titleStr.c_str()];
+
+    if (titleStr == "Quit") {
+        [fNSMenuItem setAction:@selector(terminate:)];
+        [fNSMenuItem setKeyEquivalent:@"q"];
+    }
+
     [fNSMenuItem setTitle:title];
 }
 
@@ -36,10 +42,17 @@ void jwm::MenuItemMac::setTitle(std::string titleStr) {
  * Signature: (Ljava/lang/String;)V
  */
 extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_jwm_MenuItemMac__1nSetTitle
-        (JNIEnv* env, jobject obj, jstring str) {
+        (JNIEnv* env, jobject obj, jstring titleStr) {
     jwm::MenuItemMac* instance = reinterpret_cast<jwm::MenuItemMac*>(jwm::classes::Native::fromJava(env, obj));
-    jwm::StringUTF16 title = jwm::StringUTF16::makeFromJString(env, str);
-    instance->setTitle(title.toAscii());
+    jsize len = env->GetStringLength(titleStr);
+    const jchar* chars = env->GetStringCritical(titleStr, nullptr);
+    NSString* title = [[NSString alloc] initWithCharacters:chars length:len];
+    env->ReleaseStringCritical(titleStr, chars);
+    [instance->fNSMenuItem setTitle:title];
+    [title release];
+
+    // jwm::StringUTF16 title = jwm::StringUTF16::makeFromJString(env, titleStr);
+    // instance->setTitle(title.toAscii());
 }
 
 /*

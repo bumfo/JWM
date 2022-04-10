@@ -25,15 +25,19 @@ bool jwm::MenuItemMac::init() {
     return true;
 }
 
-void jwm::MenuItemMac::setTitle(std::string titleStr) {
-    NSString* title = [NSString stringWithUTF8String:titleStr.c_str()];
-
-    if (titleStr == "Quit") {
+void jwm::MenuItemMac::setTitle(NSString* title) {
+    if ([title isEqualToString:@"Quit"]) {
         [fNSMenuItem setAction:@selector(terminate:)];
         [fNSMenuItem setKeyEquivalent:@"q"];
     }
 
     [fNSMenuItem setTitle:title];
+}
+
+void jwm::MenuItemMac::setTitle(std::string titleStr) {
+    NSString* title = [[NSString alloc] initWithUTF8String:titleStr.c_str()];
+    setTitle(title);
+    [title release];
 }
 
 /*
@@ -48,7 +52,7 @@ extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_jwm_MenuItemMac__1nSet
     const jchar* chars = env->GetStringCritical(titleStr, nullptr);
     NSString* title = [[NSString alloc] initWithCharacters:chars length:len];
     env->ReleaseStringCritical(titleStr, chars);
-    [instance->fNSMenuItem setTitle:title];
+    instance->setTitle(title);
     [title release];
 
     // jwm::StringUTF16 title = jwm::StringUTF16::makeFromJString(env, titleStr);

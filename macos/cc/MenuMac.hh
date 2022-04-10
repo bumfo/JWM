@@ -14,6 +14,7 @@ namespace jwm {
         bool init();
 
         void setTitle(std::string title);
+        void setTitle(NSString* title);
 
         void addItem(JNIEnv* env, MenuItemMac* item);
 

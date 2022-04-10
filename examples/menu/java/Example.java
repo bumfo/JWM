@@ -38,13 +38,25 @@ public class Example implements Consumer<Event> {
         if (menu instanceof MenuMac menubar) {
             MenuMac.setApplicationMenu(menubar);
             menubar
-                .addItem(new MenuItemMac().setTitle("A").setSubmenu(new MenuMac()
-                    .addItem(new MenuItemMac().setTitle("A1"))))
-                .addItem(new MenuItemMac().setTitle("B").setSubmenu(new MenuMac()
-                    .addItem(new MenuItemMac().setTitle("B1"))))
-                .addItem(new MenuItemMac().setTitle("C").setSubmenu(new MenuMac()
-                    .addItem(new MenuItemMac().setTitle("C1").setSubmenu(new MenuMac()
-                        .addItem(new MenuItemMac().setTitle("C1.1"))))));
+                .addItem(new MenuItemMac().setTitle("Apple").setSubmenu(new MenuMac()
+                    .addItem(new MenuItemMac().setTitle("Apple.1"))
+                    .addItem(new MenuItemMac().setTitle("Quit"))))
+                .addItem(new MenuItemMac().setTitle("View").setSubmenu(new MenuMac()
+                    .addItem(new MenuItemMac().setTitle("View.1"))))
+                .addItem(new MenuItemMac().setTitle("Service").setSubmenu(new MenuMac()
+                    .addItem(new MenuItemMac().setTitle("Service.1"))))
+                .addItem(new MenuItemMac().setTitle("Window").setSubmenu(new MenuMac()
+                    .addItem(new MenuItemMac().setTitle("Window.1"))))
+                .addItem(new MenuItemMac().setTitle("Help").setSubmenu(new MenuMac()
+                    .addItem(new MenuItemMac().setTitle("Help.1").setSubmenu(new MenuMac()
+                        .addItem(new MenuItemMac().setTitle("Help.1.1"))))));
+
+            // menubar
+            //     .addItem(new MenuItemMac().setTitle("App").setSubmenu(new MenuMac()
+            //         .addItem(new MenuItemMac().setTitle("About"))
+            //         .addItem(new MenuItemMac().setTitle("Quit"))))
+            //     .addItem(new MenuItemMac().setTitle("View").setSubmenu(new MenuMac()
+            //         .addItem(new MenuItemMac().setTitle("Enter Full Screen"))));
         }
     }
 

@@ -26,6 +26,16 @@ Prerequisites: Git, CMake 3.11+, Ninja, a C++ compiler, JDK 11+, `$JAVA_HOME`, P
 
 There is no test suite. Verify changes by running an example (`script/run.py`) and exercising the affected feature manually.
 
+### Consuming an unreleased patch from a downstream project
+
+`script/build.py` only writes `target/classes/` locally; the Maven Central JAR is assembled in CI. Downstream Gradle/Maven projects can pin against the directory directly:
+
+```groovy
+implementation files("/abs/path/to/jwm/target/classes")
+```
+
+`impl/Library.java` loads the platform native lib (`libjwm_<arch>.dylib` / `jwm_x64.dll` / `libjwm_x64.so`) from the same classpath root at runtime, so no extra wiring is needed. Useful for end-to-end testing a JWM patch in a downstream app before opening a PR.
+
 ## Architecture
 
 ### Code layout
@@ -50,6 +60,30 @@ Java compilation is one `javac` invocation over all four source roots (`shared/j
 - All JWM API calls (except `App.runOnUIThread`) must happen on the UI thread; many methods `assert _onUIThread()`. From any other thread, use `App.runOnUIThread(Runnable)`.
 - Native side: `jwm::Window` (`shared/cc/Window.hh`) holds a `JNIEnv*` plus a global ref to the Java `Window`. Events are dispatched by calling `Window.accept(Event)` from C++ via `jwm::classes::Consumer::accept`. JNI method bindings live in `Java_io_github_humbleui_jwm_*` exports in the platform `.mm`/`.cc` files.
 - Rendering is on-demand and v-synced: client calls `window.requestFrame()`, JWM eventually delivers an `EventFrame` (or `EventFrameSkija` when a `Layer*Skija` is attached), the listener paints and may request another frame.
+- macOS-specific: `WindowMac.setVisible(true)` synchronously dispatches `EventWindowScreenChange` (via `super.setVisible(true)`), even when the window was already visible. Layer-reconfigure work piggybacks on that event. New code that hooks visibility transitions should match the pattern.
+
+#### macOS frame loop / CVDisplayLink lifecycle
+
+`WindowMac.mm` runs a small state machine over five fields. They are tightly coupled — read `setVisible`, `requestFrame`, and `displayLinkCallback` together before touching any of them.
+
+| Field | Owner / meaning |
+|-------|-----------------|
+| `fDisplayLink` | The `CVDisplayLinkRef`. Created in `setVisible(true)`, released + zeroed in `setVisible(false)`. |
+| `fDisplayLinkRunning` | Whether `CVDisplayLinkStart` is in effect. **Must be reset to `false` whenever the link is released or recreated.** Since 0.4.18 (commit 5cdda76) `displayLinkCallback` no longer clears this between ticks, so `setVisible(false)` is the only remaining place. Forgetting the reset leaves the next `setVisible(true)` + `requestFrame()` cycle stuck — the new link is created but never started. (See PR #305 for the regression.) |
+| `fFrameRequested` | Client asked for a frame. Cleared inside `displayLinkCallback` just before dispatching `EventFrame`. |
+| `fFrameScheduled` | A `dispatch_async` block for the next frame is already queued. Prevents the callback from posting multiple frames per tick. |
+| `fVisible` | Mirror of the last `setVisible` argument. Gated by the `fDisplayLinkMutex`. |
+
+`requestFrame()` is the only place that calls `CVDisplayLinkStart`, and it short-circuits on `fVisible && !fDisplayLinkRunning`. If either flag is stale relative to the actual `fDisplayLink`, no `EventFrame` is dispatched and the window appears frozen until the user toggles visibility again.
+
+#### Native refcounting around async callbacks
+
+The C++ `WindowMac` is reference-counted (`shared/cc/impl/RefCounted.cc`). Any code path that hands a `this` pointer to a system callback must pin the lifetime explicitly:
+
+- `setVisible(true)` does `ref()` to keep the window alive across `CVDisplayLink` callbacks; `setVisible(false)` (and `close()`) does the matching `unref()`.
+- `displayLinkCallback` does `ref()` before `dispatch_async` and `unref()` inside the dispatched block.
+
+New async code (system framework callbacks, `dispatch_async`, GCD timers, etc.) needs the same pattern. Skipping it produces use-after-free crashes that only show up when the window closes during an in-flight callback.
 
 ### Skija integration
 

@@ -221,6 +221,13 @@ public class WindowX11 extends Window {
     }
 
     @Override
+    public Window setParentWindow(Window parent) {
+        assert _onUIThread() : "Should be run on UI thread";
+        // TODO implement (XSetTransientForHint)
+        return this;
+    }
+
+    @Override
     public float getProgressBar() {
         throw new UnsupportedOperationException("impl me!");
     }

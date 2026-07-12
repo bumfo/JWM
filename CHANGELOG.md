@@ -1,5 +1,6 @@
 # WIP
 
+- Added `Window::setParentWindow` (macOS only for now): attach a window as a child of another, keeping it above its parent without floating above other applications
 - Bumped types in pom.xml to 0.2.0
 - Windows, Linux: Window::setIconPixels (previously setIconData on Linux) #310 #135 via @chirontt 
 - macOS: fixed incorrect app shutdown

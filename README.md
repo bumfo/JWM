@@ -135,6 +135,7 @@ Alpha. Expect API breakages.
 | setResizable        | ❌   | ❌   | ❌   |
 | bringToFront        | ✅   | ❌   | ❌   |
 | isFront             | ✅   | ✅   | ❌   |
+| setParentWindow     | ❌   | ✅   | ❌   |
 
 ### Events
 

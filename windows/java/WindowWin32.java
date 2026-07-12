@@ -212,6 +212,13 @@ public class WindowWin32 extends Window {
     }
 
     @Override
+    public Window setParentWindow(Window parent) {
+        assert _onUIThread() : "Should be run on UI thread";
+        // TODO implement (owner window via GWLP_HWNDPARENT; see winSetParent)
+        return this;
+    }
+
+    @Override
     public float getProgressBar() {
         throw new UnsupportedOperationException("impl me!");
     }

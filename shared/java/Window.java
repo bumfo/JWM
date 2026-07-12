@@ -390,10 +390,28 @@ public abstract class Window extends RefCounted implements Consumer<Event> {
 
     /**
      * <p>Makes window float always on top.</p>
-     * 
+     *
      * @return  this
      */
     public abstract Window setZOrder(ZOrder order);
+
+    /**
+     * <p>Attaches this window as a child of {@code parent}: it stays ordered above the
+     * parent window, but — unlike {@link #setZOrder(ZOrder)} with a floating level —
+     * does not float above other applications' windows. The child moves together with
+     * its parent.</p>
+     *
+     * <p>Pass {@code null} to detach. Attach after making this window visible: on macOS,
+     * attaching orders the window in, and hiding a child window detaches it
+     * automatically — so re-attach on every show.</p>
+     *
+     * <p>Currently implemented on macOS only ({@code addChildWindow:ordered:}); no-op on
+     * Windows and X11.</p>
+     *
+     * @param parent  window to attach to, or {@code null} to detach
+     * @return  this
+     */
+    public abstract Window setParentWindow(@Nullable Window parent);
 
     /**
      * @return The current progress bar value for this window

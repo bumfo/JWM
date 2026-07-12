@@ -600,6 +600,18 @@ extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_jwm_WindowMac__1nSetZO
     nsWindow.level = level;
 }
 
+extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_jwm_WindowMac__1nSetParentWindow
+  (JNIEnv* env, jobject obj, jlong parentPtr) {
+    jwm::WindowMac* instance = reinterpret_cast<jwm::WindowMac*>(jwm::classes::Native::fromJava(env, obj));
+    NSWindow* nsWindow = instance->fNSWindow;
+    if (nsWindow.parentWindow)
+        [nsWindow.parentWindow removeChildWindow:nsWindow];
+    if (parentPtr) {
+        jwm::WindowMac* parent = reinterpret_cast<jwm::WindowMac*>(static_cast<uintptr_t>(parentPtr));
+        [parent->fNSWindow addChildWindow:nsWindow ordered:NSWindowAbove];
+    }
+}
+
 extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_jwm_WindowMac__1nSetProgressBar
   (JNIEnv* env, jobject obj, jfloat value) {
     // Based on

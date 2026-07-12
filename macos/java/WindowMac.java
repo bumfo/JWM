@@ -4,6 +4,7 @@ import java.io.*;
 import java.util.concurrent.*;
 import java.util.function.*;
 import org.jetbrains.annotations.*;
+import io.github.humbleui.jwm.impl.*;
 import io.github.humbleui.types.*;
 
 public class WindowMac extends Window {
@@ -281,6 +282,13 @@ public class WindowMac extends Window {
     }
 
     @Override
+    public Window setParentWindow(@Nullable Window parent) {
+        assert _onUIThread() : "Should be run on UI thread";
+        _nSetParentWindow(Native.getPtr(parent));
+        return this;
+    }
+
+    @Override
     public float getProgressBar() {
         assert _onUIThread() : "Should be run on UI thread";
         return _lastProgressBarValue;
@@ -366,6 +374,7 @@ public class WindowMac extends Window {
     @ApiStatus.Internal public native void _nFocus();
     @ApiStatus.Internal public native int _nGetZOrder();
     @ApiStatus.Internal public native void _nSetZOrder(int zOrder);
+    @ApiStatus.Internal public native void _nSetParentWindow(long parentPtr);
     @ApiStatus.Internal public native void _nSetProgressBar(float value);
     @ApiStatus.Internal public native void _nClose();
     @ApiStatus.Internal public native void _nSetPressAndHoldEnabled(boolean enabled);

@@ -608,7 +608,12 @@ extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_jwm_WindowMac__1nSetPa
         [nsWindow.parentWindow removeChildWindow:nsWindow];
     if (parentPtr) {
         jwm::WindowMac* parent = reinterpret_cast<jwm::WindowMac*>(static_cast<uintptr_t>(parentPtr));
+        // Auxiliary behavior lets the child join the parent's fullscreen Space;
+        // with FullScreenPrimary it would be ordered onto a separate Space.
+        [nsWindow setCollectionBehavior:NSWindowCollectionBehaviorFullScreenAuxiliary];
         [parent->fNSWindow addChildWindow:nsWindow ordered:NSWindowAbove];
+    } else {
+        [nsWindow setCollectionBehavior:NSWindowCollectionBehaviorFullScreenPrimary];
     }
 }
 
